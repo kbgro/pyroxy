@@ -14,7 +14,7 @@ def proxies():
 
 
 @proxies.command()
-@click.argument("")
+@click.argument("filename")
 def proxylist(filename):
     """Write proxy list to a file."""
     proxy_list = pyroxy.filter_proxy_list(None, [Protocol.HTTPS, Protocol.SOCKS4], [Anonymity.HIA])
