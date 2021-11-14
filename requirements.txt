@@ -1,0 +1,5 @@
+requests~=2.26.0
+pytest~=6.2.5
+click~=8.0.3
+parsel~=1.6.0
+setuptools~=58.2.0
