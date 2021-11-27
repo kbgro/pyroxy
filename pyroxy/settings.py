@@ -1,5 +1,5 @@
 class Config:
-    GEO_NODE_URL = "https://proxylist.geonode.com/api/proxy-list?limit=100&page=1&sort_by=lastChecked&sort_type=desc&speed=fast"  # noqa
+    GEO_NODE_URL = "https://proxylist.geonode.com/api/proxy-list?limit=200&page=1&sort_by=lastChecked&sort_type=desc&speed=fast"  # noqa
     FREE_PROXY_NET_URL = "https://free-proxy-list.net/"
 
     HEADERS = {
