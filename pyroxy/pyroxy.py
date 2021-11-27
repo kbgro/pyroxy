@@ -10,20 +10,30 @@ from .settings import Config
 ProxiesType = List[ProxyAddress]
 
 
-def proxy_list() -> ProxiesType:
+def proxy_list(site: Optional[str]) -> ProxiesType:
     proxies = []
 
     fn_proxy_list = FreeProxyNetParser.parse(requests.get(Config.FREE_PROXY_NET_URL, headers=Config.HEADERS))
     geo_proxy_list = GeoNodeProxyParser.parse(requests.get(Config.GEO_NODE_URL, headers=Config.HEADERS))
 
-    proxies.extend(fn_proxy_list)
-    proxies.extend(geo_proxy_list)
+    print(f"FREE NET: {len(fn_proxy_list)}")
+    print(f"GEONODE : {len(geo_proxy_list)}")
+
+    if not site:
+        proxies.extend(fn_proxy_list)
+        proxies.extend(geo_proxy_list)
+    elif site and site.lower() == "freeproxy":
+        proxies.extend(fn_proxy_list)
+    elif site and site.lower() == "geonode":
+        proxies.extend(geo_proxy_list)
 
     return proxies
 
 
-def filter_proxy_list(google: Optional[bool], protocols: List[Protocol], anonymity: List[Anonymity]) -> ProxiesType:
-    proxies = proxy_list()
+def filter_proxy_list(
+    site: Optional[str], protocols: List[Protocol], anonymity: List[Anonymity], google: Optional[bool] = None
+) -> ProxiesType:
+    proxies = proxy_list(site)
 
     filtered_proxies = ProxyFilters.google(proxies, google)
     filtered_proxies = ProxyFilters.protocol(filtered_proxies, protocols)

@@ -1,3 +1,4 @@
+import logging
 from abc import ABC, abstractmethod
 from typing import List
 
@@ -5,6 +6,8 @@ from parsel import Selector
 from requests import Response
 
 from .address import Anonymity, Protocol, ProxyAddress, Speed, SpeedType
+
+logger = logging.getLogger(__file__)
 
 
 class FreeProxyParser(ABC):
@@ -32,6 +35,10 @@ class FreeProxyParser(ABC):
 class FreeProxyNetParser(FreeProxyParser):
     @classmethod
     def parse(cls, response: Response) -> List[ProxyAddress]:
+        if response.status_code != 200:
+            logger.info(f"Response: [{response.status_code}] : {response.url}")
+            return []
+
         selector = Selector(response.text)
         p_rows = selector.css(".fpl-list > table tr")
 
@@ -60,6 +67,10 @@ class FreeProxyNetParser(FreeProxyParser):
 class GeoNodeProxyParser(FreeProxyParser):
     @classmethod
     def parse(cls, response: Response) -> List[ProxyAddress]:
+        if response.status_code != 200:
+            logger.info(f"Response: [{response.status_code}] : {response.url}")
+            return []
+
         data = response.json().get("data")
 
         proxy_list = []

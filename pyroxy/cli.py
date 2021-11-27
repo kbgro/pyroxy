@@ -15,9 +15,10 @@ def proxies():
 
 @proxies.command()
 @click.argument("filename")
-def proxylist(filename):
+@click.option("--site", type=click.Choice(["geonode", "freeproxy"], case_sensitive=False))
+def proxylist(filename, site):
     """Write proxy list to a file."""
-    proxy_list = pyroxy.filter_proxy_list(None, [Protocol.HTTPS, Protocol.SOCKS4], [Anonymity.HIA])
+    proxy_list = pyroxy.filter_proxy_list(site, [Protocol.HTTPS, Protocol.SOCKS4, Protocol.SOCKS5], [Anonymity.HIA])
     pyroxy.proxy_list_file(filename, proxy_list)
 
 
